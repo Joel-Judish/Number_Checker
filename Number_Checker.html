@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Checker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #6e45e2, #88d3ce);
+            color: #333;
+        }
+
+        .container {
+            text-align: center;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            width: 350px;
+            font-size: 20px;
+        }
+
+        input, select, button {
+            margin: 10px;
+            padding: 10px;
+            font-size: 20px;
+            width: calc(100% - 20px);
+            border: none;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        button {
+            background: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+            flex: 1;
+            margin: 5px;
+            padding: 10px;
+            font-size: 20px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #218838;
+        }
+
+        .reset {
+            background: #dc3545;
+        }
+
+        .reset:hover {
+            background: #c82333;
+        }
+
+        #result {
+            font-size: 18px;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .error {
+            color: red;
+        }
+
+        .success {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Number Checker</h2>
+
+        <input type="number" id="numberInput" placeholder="Enter a number">
+        <select id="optionSelect">
+            <option value="">Select an option</option>
+            <option value="fibonacci">Fibonacci Series</option>
+            <option value="factorial">Factorial</option>
+            <option value="even">Even Number</option>
+            <option value="prime">Prime Number</option>
+        </select>
+
+        <div class="buttons">
+            <button onclick="checkNumber()">Check</button>
+            <button class="reset" onclick="resetForm()">Reset</button>
+        </div>
+
+        <p id="result"></p>
+    </div>
+
+    <script>
+        // Function to generate Fibonacci series up to n
+        function generateFibonacci(n) {
+            let series = [0, 1];
+            let next = 1;
+            while (next <= n) {
+                next = series[series.length - 1] + series[series.length - 2];
+                if (next <= n) series.push(next);
+            }
+            return series;
+        }
+
+        // Function to check if a number is in Fibonacci series
+        function isFibonacci(n) {
+            if (n < 0) return false;
+            let a = 0, b = 1;
+            while (b < n) {
+                let temp = b;
+                b = a + b;
+                a = temp;
+            }
+            return b === n || n === 0;
+        }
+
+        // Function to check if a number is prime
+        function isPrime(n) {
+            if (n < 2) return false;
+            for (let i = 2; i <= Math.sqrt(n); i++) {
+                if (n % i === 0) return false;
+            }
+            return true;
+        }
+
+        // Function to check if a number is even
+        function isEven(n) {
+            return n % 2 === 0;
+        }
+
+        // Function to calculate factorial of a number
+        function factorial(n) {
+            if (n < 0) return -1;
+            let fact = 1;
+            for (let i = 1; i <= n; i++) {
+                fact *= i;
+            }
+            return fact;
+        }
+
+        // Function to check the selected condition
+        function checkNumber() {
+            let num = document.getElementById("numberInput").value.trim();
+            let option = document.getElementById("optionSelect").value;
+            let resultElement = document.getElementById("result");
+
+            if (num === "") {
+                resultElement.className = "error";
+                resultElement.textContent = "Please enter a valid number.";
+                return;
+            }
+
+            num = parseInt(num);
+
+            if (option === "") {
+                resultElement.className = "error";
+                resultElement.textContent = "Please select an option.";
+                return;
+            }
+
+            let resultText = "";
+
+            if (option === "fibonacci") {
+                const series = generateFibonacci(num);
+                const isInFibonacci = isFibonacci(num);
+                resultText = `Fibonacci series up to ${num}: ${series.join(", ")}\n`;
+                resultText += isInFibonacci ? `${num} is in the Fibonacci series.` : `${num} is NOT in the Fibonacci series.`;
+            } else if (option === "factorial") {
+                let factResult = factorial(num);
+                resultText = factResult !== -1 ? `Factorial of ${num} is ${factResult}.` : "Factorial is not defined for negative numbers.";
+            } else if (option === "even") {
+                resultText = isEven(num) ? `${num} is an Even number.` : `${num} is NOT an Even number.`;
+            } else if (option === "prime") {
+                resultText = isPrime(num) ? `${num} is a Prime number.` : `${num} is NOT a Prime number.`;
+            }
+
+            resultElement.className = resultText.includes("NOT") ? "error" : "success";
+            resultElement.textContent = resultText;
+        }
+
+        // Function to reset the form
+        function resetForm() {
+            document.getElementById("numberInput").value = "";
+            document.getElementById("optionSelect").value = "";
+            document.getElementById("result").textContent = "";
+        }
+    </script>
+</body>
+</html>
