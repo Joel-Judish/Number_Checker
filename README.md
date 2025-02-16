@@ -1,6 +1,6 @@
 # Number Checker
 
-# Overview
+Overview
 The **Number Checker** is a simple web application that allows users to input a number and check various mathematical properties of the number. The application provides options to check:
 
 - Whether the number belongs to the Fibonacci series
